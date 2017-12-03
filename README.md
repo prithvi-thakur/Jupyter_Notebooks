@@ -1,6 +1,4 @@
 # Jupyter_Notebooks
-Some jupyter notebook programs from my coursework.
+Some jupyter notebook codes from my coursework.
 
-All the data and formulations belong to the respective instructors at U of M.
-
-You can view these notebooks interactively at https://nbviewer.jupyter.org/.
+To view these notebooks, go to https://nbviewer.jupyter.org/, and type the url of the jupyter notebook from my github repository.
