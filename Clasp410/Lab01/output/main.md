@@ -5,35 +5,28 @@ output:
         latex_engine: xelatex
         sansfont: roboto
 author: Prithvi Thakur
+date: "08-09-2018"
 ---
 
-A First Level Header
+Code and test case
 ====================
 
-A Second Level Header
----------------------
 
-Now is the time for all good men to come to
-the aid of their country. This is just a
-regular paragraph.
-
-The quick brown fox jumped over the lazy
-dog's back.
-
-### Header 3
-
-> This is a blockquote.
->
-> This is the second paragraph in the blockquote.
->
-> ## This is an H2 in a blockquote
-
+Experiment 1
+===================
+Considering a dry forest with the following parameters:
 ```python
-import numpy as np
-import matplotlib.pyplot as plt
+# Grid setup
+Nx = 250    # Points in the x-direction
+Ny = 250    # Points in the y-direction
 
-print("Hello World!")
-def func():
-    a = 2
-    return a
+# Probability that a cell is on fire
+prob.start_fire = 0.000025
+
+# Probability a neighboring node catches fire
+prob.catch_fire = 1
 ```
+
+Since the probability of cell catching fire initially is very low, only a few points are on fire initially (Fig 1).
+
+![img1](figs/Experiment1a_0.png)
