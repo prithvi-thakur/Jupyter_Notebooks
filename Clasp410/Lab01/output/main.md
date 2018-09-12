@@ -29,4 +29,4 @@ prob.catch_fire = 1
 
 Since the probability of cell catching fire initially is very low, only a few points are on fire initially (Fig 1).
 
-![img1](figs/Experiment1a_0.png)
+![img1](figs/test0.png)
