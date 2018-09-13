@@ -4,7 +4,7 @@
 #
 #   Author: Prithvi Thakur
 #   Written in: Python v3.6.6
-#   Last Modified: 09-11-2018
+#   Last Modified: 09-13-2018
 #
 #   Clasp 410 Lab 1: In a two dimensional forest
 #                    with some trees and some bare
@@ -26,23 +26,35 @@ from matplotlib import colors
 #---------------
 
 # Define grid of ones
-Nx = 10; Ny = 10
+Nx = 250; Ny = 250
 Grid = np.ones((Nx,Ny))
 
 # Grid without boundary elements
 inner_grid = Grid[1:Nx-1, 1:Ny-1]
 
 # Define probabilities
-start_fire = 0.01 # Probability that each cell is on fire   
-catch_fire = 1    # Probability that a neighboring node catches fire
-bare_patch = 0    # Probability that there is a bare patch 
+start_fire = 0.000025 # Probability that each cell is on fire   
+catch_fire = 0.7    # Probability that a neighboring node catches fire
+bare_patch = 0.225 # Probability that there is a bare patch 
+
+
+#------------------------
+# Grid point values:
+#       1 = bare patch
+#       2 = trees
+#       3 = trees on fire
+#------------------------
+
 
 # Initialize grid
-rnd = np.random.rand(Nx-2, Ny-2)    # matrix of random numbers of inner grid size
-# if random number is greater than bare patch probability, grid point is tree
+
+# 1. Create a matrix of random numbers same size as the inner grid
+rnd = np.random.rand(Nx-2, Ny-2)
+# 2. Compare the random matrix with the bare patch probability and for the locations
+#    where random number is greater, assign trees to the inner grid 
 inner_grid[rnd > bare_patch] = 2      
 
-# Set initial fire
+# Set initial fire: similar procedure as above
 rnd = np.random.rand(Nx-2, Ny-2)
 inner_grid[rnd < start_fire] = 3
 
@@ -55,7 +67,7 @@ cells_on_fire = (Grid == 3).sum()
 # Reshape grid matrix as array
 grd = Grid.reshape(Nx*Ny)
 
-# Compute the neighboring indices
+# Compute the neighboring indices for 1D array
 neighbour = lambda x: np.array([x-Nx, x+Nx, x-1, x+1])
 
 """
@@ -120,17 +132,18 @@ norm = colors.BoundaryNorm(bounds, cmap.N)
 # Function to plot figures at various timesteps
 def grid_plot(anim_Grid, it):
 
-    for i in range(it-1):
+    #for i in range(it-1):       # use this if you want every timestep
+    for i in [50, 100, 200, 300, 400]: #[0,int(it/2),it-1]:   # use this for specific timesteps
         fig = plt.figure()
         ax = plt.axes(xlim=(0,Nx), ylim=(0,Ny))
         ax.set_xlabel("Points along X axis")
         ax.set_ylabel("Points along Y axis")
-        ax.set_title("Test Case 1: grid at iteration " + str(i))
+        ax.set_title("Experiment 3: Mixed setting: Iteration " + str(i))
 
         im = ax.imshow(anim_Grid[i,:,:], extent = [0,Nx,0,Ny], interpolation='nearest',
                         cmap = cmap, norm = norm)
         plt.show()
-        plt.savefig("test" + str(i) + ".png", dpi=300)
+        plt.savefig("exp3_" + str(i) + ".png", dpi=300)
 
 
 
@@ -150,13 +163,13 @@ fig = plt.figure()
 ax = plt.axes(xlim=(0,Nx), ylim=(0,Ny))
 ax.set_xlabel("Points along X axis")
 ax.set_ylabel("Points along Y axis")
-ax.set_title("Experiment 1: with no bare patches")
+ax.set_title("Experiment 1a: with 10 percent catch fire probability")
 
 im = ax.imshow(anim_Grid[0,:,:], extent = [0,Nx,0,Ny], interpolation='nearest',
                 cmap = cmap, norm = norm)
 
 anim = animation.FuncAnimation(fig, updatefig, init_func=init, frames = it,
-                               interval=400)
+                               interval=40)
 
 #  mywriter = animation.FFMpegWriter()
 #  anim.save('Experiment1a.mp4', writer=mywriter)
