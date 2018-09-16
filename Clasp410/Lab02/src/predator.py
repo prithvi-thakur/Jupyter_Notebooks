@@ -21,20 +21,22 @@ from matplotlib import animation, rc
 from matplotlib import colors
 
 
-# Lotka-Volterra model
-#---------------------
+# Lotka-Volterra competition between species model
+#--------------------------------------------------
 # (dN1/dt) = aN1(1-N1) - bN1N2
 # (dN2/dt) = cN2(1-N2) - dN2N1
 # a,b,c,d are constants
 
 
 # Input parameter set
-a = 1; b = 2; c = 1; d = 3
+a = 3; b = 2; c = 4; d = 3
 
-N1o = 0.35   # N1 at (t = 0)
-N2o = 0.65   # N2 at (t = 0)
+# Initial conditions
+N1o = 0.1   # N1 at (t = 0)
+N2o = 0.9   # N2 at (t = 0)
 
-dt = 0.01      # shortest timestep
+# Time related variables
+dt = 0.001      # shortest timestep
 t = 0       # time variable
 tmax = 10    # maximum time
 it = 0      # iterator
@@ -55,10 +57,34 @@ N2[0] = N2o
 # N2[t + dt] = N2[t] + (cN2[t]*(1-N2[t]) - dN1[t]N2[t])dt
 
 
+class competition_model:
+    "Lotka-Volterra Competition between species model"
+    
+    # Parameters a,b,c,d 
+    def set_parameters(self,a, b,c,d):
+        return a,b,c,d
+    
+    def euler_fwd_step(self, N1, N2, dt):
+
+        a,b,c,d = self.set_parameters()
+        
+        # N1, N2 at the next time-steps
+        N1_it = N1 + (a*N1*(1 - N1) - b*N1*N2)*dt
+        N2_it = N2 + (c*N2*(1 - N2) - d*N1*N2)*dt
+
+        return N1_it, N2_it
+
+# Main Function
+def main():
+
+    # Specify question 1 or 2
+    C = competition_model()     # Create object
+    C.set_parameters(3,2,4,3)   # set parameters
+
 # TIME LOOP
 #-----------
 while t < tmax:
-
+    
     t = t + dt      # update time
     it = it + 1
 
@@ -68,10 +94,7 @@ while t < tmax:
 
     time_[it] = t
 
-# Remove unallocated vectors
-N1 = N1[0:it+1]
-N2 = N2[0:it+1]
-time_ = time_[0:it+1]
+#----------end-while---------
 
 # Plot stuff
 fig = plt.figure()
@@ -84,9 +107,8 @@ ax.fill_between(time_, N1, alpha=0.4)
 ax.fill_between(time_, N2, alpha=0.4)
 
 ax.set_xlabel("Time")
-ax.set_ylabel("Population (N1/N2)")
+ax.set_ylabel("Population (N1 or N2)")
 ax.set_title("Lotka-Volterra competition between species model")
 ax.legend(loc="upper right")
 
 plt.show()
-
