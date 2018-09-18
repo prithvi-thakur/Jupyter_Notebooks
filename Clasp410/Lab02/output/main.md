@@ -11,7 +11,6 @@ date: "09-16-2018"
 Testing
 ====================
 
-For testing, we consider a small grid of 10x10 space dimensions. The boundaries are bare groundand the rest of the inner domain is all forest. The probability of starting fire is low enough to ignite just one cell. The probability of neighbours catching fire is 1. We look at first few timestep to see the propagation of fire. 
 
 The following conditions should be a sufficient test for the workflow.
 
@@ -23,7 +22,10 @@ The following conditions should be a sufficient test for the workflow.
 
 Part 1: Competition between species model
 ==============
-<!-- ![Experiment 1: 0 percents forest](figs/exp_1c.png) -->
+
+For the parameter choice `a = 1, b = 2, c = 1, d = 3`, we see that the species `N2` become extinct, as shown in the figures below. 
+![Part1: Fig 1a](figs/Part1a_population.png)
+![Part1: Fig 1b](figs/Part1a_phase.png)
 
 
 Experiment 2

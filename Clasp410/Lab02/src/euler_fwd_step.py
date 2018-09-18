@@ -21,15 +21,15 @@ import matplotlib.pyplot as plt
 def main():
     
     # Create object: choose between the two models
-    #C = competition_model()     
-    C = predator_prey_model()
+    C = competition_model()     
+    #  C = predator_prey_model()
 
     # Set the values of a,b,c,d
-    param = C.set_parameters(1,2,1,3)   # set parameters: task 1
-    #  param = C.set_parameters(3,2,4,3)   # set parameters: task 2
+    #  param = C.set_parameters(1,2,1,3)   # set parameters: task 1
+    param = C.set_parameters(3,2,4,3)   # set parameters: task 2
 
     # Time related variables
-    dt = 0.01      # shortest timestep
+    dt = 0.001      # shortest timestep
     t = 0       # time variable
     tmax = 20    # maximum time
     it = 0      # iterator
@@ -41,7 +41,7 @@ def main():
     time_ = np.zeros(nmax)
     
     # Set initial conditions
-    N1[0], N2[0] = C.set_initial_conditions(1,0)
+    N1[0], N2[0] = C.set_initial_conditions(0.4,0.6)
 
     # Time-loop
     while t < tmax:
@@ -133,7 +133,7 @@ def plot_population(N1, N2, time_):
     ax.set_ylabel("Population densities (N1 or N2)")
     ax.set_title("Lotka-Volterra competition between species model")
     ax.legend(loc="upper right")
-    plt.savefig("Test1_population.png", dpi=300)
+    plt.savefig("Part1f_population.png", dpi=300)
     plt.show()
 
 
@@ -148,7 +148,7 @@ def plot_phase(N1, N2):
     ax.set_ylabel("N2 Population density")
     ax.set_title("Lotka-Volterra competition between species model: Phase diagram")
     
-    plt.savefig("Test1_phase.png", dpi=300)
+    plt.savefig("Part1f_phase.png", dpi=300)
     plt.show()
 
 # Execute main function

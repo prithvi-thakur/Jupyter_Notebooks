@@ -22,7 +22,7 @@ def main():
     C = predator_prey_model()
 
     # Set the values of a,b,c,d
-    params = C.set_parameters(1,2,1,3)   
+    params = C.set_parameters(3,2,4,3)   
 
     # Time related variables
     tmax = 10       # maximum time
@@ -32,7 +32,7 @@ def main():
     time_ = np.linspace(0, tmax, nsteps)
     
     # Set initial conditions
-    IC = C.set_initial_conditions(0.6,0.4)
+    IC = C.set_initial_conditions(0.5,0.5)
 
     # Solve equations
     solution = odeint(C.diff_eqn, IC, time_, params)
@@ -43,7 +43,8 @@ def main():
     # Plot results
     plot_population(N1, N2, time_)
     plot_phase(N1, N2)
-    
+
+    return N1, N2
 #----------end main---------
 
 
