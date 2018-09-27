@@ -22,11 +22,11 @@ def main():
     C = predator_prey_model()
 
     # Set the values of a,b,c,d
-    params = C.set_parameters(3,2,4,3)   
+    params = C.set_parameters(1,2,1,3)   
 
     # Time related variables
     tmax = 10       # maximum time
-    nsteps = 1000    # number of timesteps
+    nsteps = 10000    # number of timesteps
 
     # Create timesteps as an array 
     time_ = np.linspace(0, tmax, nsteps)
@@ -88,7 +88,7 @@ def plot_population(N1, N2, time_):
     ax.set_ylabel("Population densities (N1 or N2)")
     ax.set_title("Lotka-Volterra Predator-Prey model")
     ax.legend(loc="upper right")
-    #  plt.savefig("Param1_fig1a.png", dpi=300)
+    plt.savefig("Part2a_population.png", dpi=300)
     plt.show()
 
 
@@ -103,7 +103,7 @@ def plot_phase(N1, N2):
     ax.set_ylabel("N2 Population density")
     ax.set_title("Lotka-Volterra Predator-Prey model: Phase diagram")
     
-    #  plt.savefig("Param1_fig1b.png", dpi=300)
+    plt.savefig("Part2a_phase.png", dpi=300)
     plt.show()
 
 # Execute main function

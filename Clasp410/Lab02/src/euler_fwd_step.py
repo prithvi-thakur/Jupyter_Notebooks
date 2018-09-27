@@ -21,17 +21,17 @@ import matplotlib.pyplot as plt
 def main():
     
     # Create object: choose between the two models
-    C = competition_model()     
-    #  C = predator_prey_model()
+    #  C = competition_model()     
+    C = predator_prey_model()
 
     # Set the values of a,b,c,d
-    #  param = C.set_parameters(1,2,1,3)   # set parameters: task 1
-    param = C.set_parameters(3,2,4,3)   # set parameters: task 2
+    param = C.set_parameters(1,2,1,3)   # set parameters: task 1
+    #  param = C.set_parameters(3,2,4,3)   # set parameters: task 2
 
     # Time related variables
     dt = 0.001      # shortest timestep
-    t = 0       # time variable
-    tmax = 20    # maximum time
+    t = 0.0       # time variable
+    tmax = 10    # maximum time
     it = 0      # iterator
     nmax = int(tmax/dt) + 1   # maximum number of timesteps
 
@@ -41,21 +41,21 @@ def main():
     time_ = np.zeros(nmax)
     
     # Set initial conditions
-    N1[0], N2[0] = C.set_initial_conditions(0.4,0.6)
+    N1[0], N2[0] = C.set_initial_conditions(0.5,0.5)
 
     # Time-loop
     while t < tmax:
         
         it = it + 1
-        t = t + dt
+        t = round(t + dt,8)     # Rounding off due to floating point precision error in python
 
         N1[it], N2[it] = C.euler_fwd_step(param, N1[it-1], N2[it-1], dt)
+        
         time_[it] = t
     #------end while-------
 
     # Plot results
     plot_population(N1, N2, time_)
-
     plot_phase(N1, N2)
     
     return N1, N2, time_
@@ -65,17 +65,19 @@ def main():
 
 class competition_model:
     "Lotka-Volterra Competition between species model"
-    # (dN1/dt) = aN1(1-N1) - bN1N2
+    # (dN1/dt) = aN1(1-N1) - bN1N2      # Differential Equations
     # (dN2/dt) = cN2(1-N2) - dN2N1
     
     # Parameters a,b,c,d 
     def set_parameters(self,a, b,c,d):
         return a,b,c,d
-
+    
+    # Initial conditions
     def set_initial_conditions(self, N1o, N2o):
         return N1o, N2o
     
     def euler_fwd_step(self, param, N1, N2, dt):
+        # Euler forward step discretized equations
         # N1[t + dt] = N1[t] + (aN1[t]*(1-N1[t]) - bN1[t]*N2[t])dt
         # N2[t + dt] = N2[t] + (cN2[t]*(1-N2[t]) - dN1[t]N2[t])dt
         
@@ -131,9 +133,9 @@ def plot_population(N1, N2, time_):
 
     ax.set_xlabel("Time (years)")
     ax.set_ylabel("Population densities (N1 or N2)")
-    ax.set_title("Lotka-Volterra competition between species model")
+    ax.set_title("Lotka-Volterra competition between species model ")
     ax.legend(loc="upper right")
-    plt.savefig("Part1f_population.png", dpi=300)
+    plt.savefig("Part2b_population.png", dpi=300)
     plt.show()
 
 
@@ -148,7 +150,7 @@ def plot_phase(N1, N2):
     ax.set_ylabel("N2 Population density")
     ax.set_title("Lotka-Volterra competition between species model: Phase diagram")
     
-    plt.savefig("Part1f_phase.png", dpi=300)
+    plt.savefig("Part2b_phase.png", dpi=300)
     plt.show()
 
 # Execute main function
