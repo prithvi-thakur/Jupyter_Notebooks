@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 def main():
     
     # Create object: choose between the two models
-    #  C = competition_model()     
-    C = predator_prey_model()
+    C = competition_model()     
+    #  C = predator_prey_model()
 
     # Set the values of a,b,c,d
     param = C.set_parameters(1,2,1,3)   # set parameters: task 1
@@ -31,7 +31,7 @@ def main():
     # Time related variables
     dt = 0.001      # shortest timestep
     t = 0.0       # time variable
-    tmax = 10    # maximum time
+    tmax = 20    # maximum time
     it = 0      # iterator
     nmax = int(tmax/dt) + 1   # maximum number of timesteps
 
@@ -42,6 +42,31 @@ def main():
     
     # Set initial conditions
     N1[0], N2[0] = C.set_initial_conditions(0.5,0.5)
+
+    #  ###############################################################
+    #  # Plot a range of initial conditions: uncomment the section
+    #  # create a 2D array: one dimension for time and other for 
+    #  # different initial conditions.
+    #  nIC = 40    # no. of different initial conditions
+    #  NN1 = np.zeros((nmax, nIC))
+    #  NN2 = np.zeros((nmax, nIC))
+
+    #  for i in range(nIC):
+
+        #  NN1[0,i], NN2[0,i] = C.set_initial_conditions((1/nIC)*i, 1 - (1/nIC)*i)
+        
+        #  it = 0; t = 0
+        #  while t < tmax:
+            
+            #  it = it + 1
+            #  t = round(t + dt,8)     # Rounding off due to floating point precision error in python
+
+            #  NN1[it,i], NN2[it,i] = C.euler_fwd_step(param, NN1[it-1,i], NN2[it-1,i], dt)
+            
+            #  time_[it] = t
+    #  #------end while-------
+    
+    #  ##############################################################
 
     # Time-loop
     while t < tmax:
@@ -55,10 +80,10 @@ def main():
     #------end while-------
 
     # Plot results
-    plot_population(N1, N2, time_)
-    plot_phase(N1, N2)
+    #  plot_population(N1, N2, time_)
+    #  plot_phase(N1, N2)
     
-    return N1, N2, time_
+    return NN1, NN2, time_
 #----------end main---------
 
 
@@ -125,8 +150,8 @@ def plot_population(N1, N2, time_):
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.plot(time_, N1, label='Species 1 population')
-    ax.plot(time_, N2, label='Species 2 population')
+    ax.plot(time_, N1, 'k-', label='Species 1 population')
+    ax.plot(time_, N2, 'b-', label='Species 2 population')
 
     ax.fill_between(time_, N1, alpha=0.4)
     ax.fill_between(time_, N2, alpha=0.4)
@@ -135,7 +160,7 @@ def plot_population(N1, N2, time_):
     ax.set_ylabel("Population densities (N1 or N2)")
     ax.set_title("Lotka-Volterra competition between species model ")
     ax.legend(loc="upper right")
-    plt.savefig("Part2b_population.png", dpi=300)
+    plt.savefig("Part1g_population.png", dpi=300)
     plt.show()
 
 
@@ -145,12 +170,12 @@ def plot_phase(N1, N2):
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.plot(N1, N2)
+    ax.plot(N1, N2, 'k-')
     ax.set_xlabel("N1 Population density")
     ax.set_ylabel("N2 Population density")
     ax.set_title("Lotka-Volterra competition between species model: Phase diagram")
     
-    plt.savefig("Part2b_phase.png", dpi=300)
+    plt.savefig("Part1g_phase.png", dpi=300)
     plt.show()
 
 # Execute main function

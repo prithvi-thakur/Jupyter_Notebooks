@@ -5,7 +5,7 @@ output:
         latex_engine: xelatex
         sansfont: roboto
 author: Prithvi Thakur
-date: "09-16-2018"
+date: "09-27-2018"
 ---
 
 Testing
@@ -62,12 +62,28 @@ Thus, for the initial ratio $N1/N2 = 1/2$, we can have the species surviving as 
 ![Part1: Fig 1c](figs/Part1b_population.png){width=60%}
 ![Part1: Fig 1d](figs/Part1b_phase.png){width=60%}
 
+
+The plots for different initial conditions with the above set of parameters for the competition between species model is shown below:
+
+![Population: Different colors show different species](figs/Part1g_population.png){width=80%}
+
+![Phase diagrams for a range of initial conditions](figs/Part1g_phase.png){width=80%}
+
 For the parameter choice `a=3, b=2, c=4, d=3`, we see that both the species co-exist.
 
 ![Part1: Fig 1e](figs/Part1f_population.png){width=60%}
 ![Part1: Fig 1f](figs/Part1f_phase.png){width=60%}
 
-Q1. The four equilibrium points are:
+Q1. The four equilibrium points can be calculated by setting both the time derivatives to zero. We can get three trivial points at $N_1 = 0, N_2 = 0; N_1 = 1, N_2 = 0; N_1 = 0, N_2 = 1$. The fourth point can be calculated as foolows:
+
+$aN_1(1 - N_1) - bN_1N_2 = 0; cN_2(1 - N_2) -dN_1N_2 = 0$
+
+implies, $a - aN_1 - bN_2 = 0; c - cN_2 - dN_1 = 0$
+
+implies, $N_1 = \frac{c(a - b)}{ac - bd}$
+
+$N_2 = \frac{a(c - d)}{ac - bd}$
+
 
 Part 2: Predator-Prey Model
 =============
