@@ -50,7 +50,7 @@ def part2():
 # Part 3: N layer atmospheric model
 def part3():
 
-    N = 73 # no. of atmospheric layers
+    N = 100 # max. no. of atmospheric layers
     
     M = 2*np.eye(N+1,N+1) # coefficient matrix = diagonal matrix of twos
     b = np.zeros(N+1)       # RHS vector
@@ -79,7 +79,7 @@ def part3():
     fluxes = np.linalg.solve(M,b)
     
     # Temperature
-    T = np.power(fluxes/σ, 0.25)
+    T = np.power(fluxes/σ, 0.25)[0:-1]
 
-    return T[0:-1]
+    return len(T) - np.where(T >= 700)[0][-1]
 
