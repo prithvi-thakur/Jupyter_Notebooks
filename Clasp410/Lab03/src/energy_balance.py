@@ -32,21 +32,33 @@ def part2():
     Tg4 = (1-α)*So/(2*σ*(2 - ε))
 
     Tg = np.power(Tg4, 0.25)
+    
+    # Global avg temperature
+    Tavg = 289
 
-
+    # find emissivity at global avg temperature
+    e_avg = ε[np.where(Tg>=289)[0][0]]
+    
     # Plot Ground temp vs emissivity
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
     ax.plot(ε, Tg)
 
+    # plot dashed lines
+    ax.plot(np.linspace(0,e_avg, 20), Tavg*np.ones(20), 'k--')
+    ax.plot(e_avg*np.ones(20), np.linspace(250,Tavg,20), 'k--')
+
     ax.set_xlabel("Emissivity")
     ax.set_ylabel("Ground Temperature (K)")
     ax.set_title("Single layer atmospheric model for earth")
-    #  plt.savefig("Part1g_population.png", dpi=300)
+    plt.savefig("Part1.png", dpi=300)
     plt.show()
 
+    return Tg, ε, e_avg
 
+
+#---------------------------------------------------------------
 # Part 3: N layer atmospheric model
 def part3():
 
@@ -82,4 +94,50 @@ def part3():
     T = np.power(fluxes/σ, 0.25)[0:-1]
 
     return len(T) - np.where(T >= 700)[0][-1]
+
+
+#---------------------------------------------------------------
+# Part 5: N layer atmospheric model with emissivity in each layer:
+def part5():
+
+    N = 100 # no. of atmospheric layers
+    
+    # Constant values for Venus:
+    So = 2600
+    α = 0.71
+    σ = 5.67e-8
+    ε = 1
+
+    # Initialize the coefficient matrix
+    M = -2*ε*np.eye(N+1,N+1) # coefficient matrix = diagonal matrix of -2ε
+    b = np.zeros(N+1)       # RHS vector
+    
+    # Incoming solar radiation
+    b[0] = -(1 - α)*So/4
+
+    # Assembling the diagonals in the coefficient matrix
+    for i in range(int(N/np.sqrt(2))+1):
+        superdiagonal_indx = (np.arange(N-i), np.arange(N-i)+i+1)
+        subdiagonal_indx = (np.arange(N-i)+i+1, np.arange(N-i))
+
+        M[superdiagonal_indx] = (ε**2)*np.power((1-ε),i)
+        M[subdiagonal_indx] = (ε**2)*np.power((1-ε),i)
+
+    # Assemble first row and column of the coefficient matrix
+    for i in range(1,N+1):
+        M[i,0] = ε*np.power((1-ε),i-1)
+        M[0,i] = ε*np.power((1-ε),i-1)
+
+    # Assemble the first element of the coefficient matrix
+    M[0,0] = -1
+    
+    # Solve system of linear equations
+    fluxes = np.linalg.solve(M,b)
+    
+    # Temperature
+    T = np.power(fluxes/σ, 0.25)
+
+    return M,T, fluxes
+
+
 
