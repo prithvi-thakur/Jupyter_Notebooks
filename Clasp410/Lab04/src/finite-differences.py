@@ -39,8 +39,11 @@ def part1():
     K = (-2*np.eye(N) + np.diag(np.ones(N-1),k=1) + np.diag(np.ones(N-1),k=-1))/dx**2
 
     K2 = K[1:-1, :]
+
+    # Square matrix without first and last rows and columns
     KI = K[1:-1, 1:-1]
     
+    # Solution
     u2 = np.dot(KI,U[1:-1])
 
     # Plot analytical vs finite difference
@@ -48,7 +51,51 @@ def part1():
     ax = fig.add_subplot(111)
 
     ax.plot(x[1:-1], u2, label='finite difference')
-    ax.plot(x, u_an, label='analytical')
+    ax.plot(x[1:-1], u_an[1:-1], label='analytical')
+
+    ax.set_xlabel("x")
+    ax.set_ylabel("u(x)")
+    plt.legend()
+    plt.show()
+
+    return u2, u_an
+
+
+# Finite difference matrix
+def fdmatrix(N, dx):
+    
+    K = (-2*np.eye(N) + np.diag(np.ones(N-1),k=1) + np.diag(np.ones(N-1),k=-1))/dx**2
+
+    # return the inner part of the matrix without first and last rows and columns
+    return K[1:-1, 1:-1]
+
+
+
+def part2():
+
+    # Domain discretization
+    N = 100
+    xmax = 1; xmin = -1
+    dx = (xmax-xmin)/(N-1)  # grid spacing
+    x = np.linspace(xmin, xmax, N)
+
+    # Right hand side of the matrix
+    rhs = -2*np.ones(N-2)
+    
+    # Finite difference matrix
+    K = fdmatrix(N, dx)
+
+    # Solve the matrix equation
+    sol = np.linalg.solve(K, rhs)
+    
+    # Include boundary conditions
+    sol2 = np.hstack([0,sol,0])
+
+    # Plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.plot(x, sol2, label='finite difference solution')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u(x)")
@@ -56,4 +103,90 @@ def part1():
     plt.show()
 
 
-    return u2, u_an
+def part3():
+
+    # Domain discretization
+    N = 100
+    xmax = 1; xmin = -1
+    dx = (xmax-xmin)/(N-1)  # grid spacing
+    x = np.linspace(xmin, xmax, N)
+
+    # Right hand side of the matrix
+    rhs = -2*np.ones(N-1)
+    
+    # Finite difference matrix
+    K = (-2*np.eye(N) + np.diag(np.ones(N-1),k=1) + np.diag(np.ones(N-1),k=-1))/dx**2
+
+    # Strip the last row and column
+    K2 = K[0:-1, 0:-1]
+
+    # Top Boundary:
+    K2[0,0] = 1; K2[0,1] = -1
+    rhs[0] = 0
+
+
+    # Analytical solution
+    u_an = -x**2 -2*x + 3
+    
+    # Solve the matrix equation
+    sol = np.linalg.solve(K2, rhs)
+    
+    # Include boundary conditions
+    sol2 = np.hstack([sol,0])
+
+    # Plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.plot(x, sol2, label='finite difference solution')
+    ax.plot(x, u_an, label='analytical solution')
+
+    ax.set_xlabel("x")
+    ax.set_ylabel("u(x)")
+    plt.legend()
+    plt.show()
+
+    #  return K2
+
+
+def part4():
+
+    # Domain discretization
+    N = 1000
+    xmax = 1; xmin = -1
+    dx = (xmax-xmin)/(N-1)  # grid spacing
+    x = np.linspace(xmin, xmax, N)
+
+    # Right hand side of the matrix
+    rhs = -2*np.ones(N)
+    
+    # Finite difference matrix
+    K = (-2*np.eye(N) + np.diag(np.ones(N-1),k=1) + np.diag(np.ones(N-1),k=-1))/dx**2
+
+    # Top Boundary:
+    K[0,0] = 1; K[0,1] = -1
+    rhs[0] = 0
+
+    # Bottom Boundary
+    K[-1,-1] = 1
+    K[-1,-2] = 0
+    rhs[-1] = 1
+
+    # Analytical solution
+    u_an = -x**2 -2*x + 4
+    
+    # Solve the matrix equation
+    sol = np.linalg.solve(K, rhs)
+    
+    # Plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.plot(x, sol, label='finite difference solution')
+    ax.plot(x, u_an, label='analytical solution')
+
+    ax.set_xlabel("x")
+    ax.set_ylabel("u(x)")
+    plt.legend()
+    plt.show()
+
