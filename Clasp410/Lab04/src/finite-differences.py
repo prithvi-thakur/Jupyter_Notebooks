@@ -4,7 +4,7 @@
 #
 #   Author: Prithvi Thakur
 #   Written in: Python v3.6.6
-#   Last Modified: 10-18-2018
+#   Last Modified: 10-25-2018
 #
 #   Clasp 410 Lab 4: Finite Difference Matrices
 #                    
@@ -13,14 +13,18 @@
 
 # Import modules
 import numpy as np
+import os
 import matplotlib.pyplot as plt
-
+path = '/Volumes/GoogleDrive/My Drive/Courses/coursework/Clasp410/Lab04/figs/'
 
 # Given function: u(x) = (1-x^2)
 def u(x):
     return (1 - x**2)**2
 
 def part1():
+
+    global path
+
     # Domain: [-1,1]
     xmin = -1
     xmax = 1
@@ -50,15 +54,16 @@ def part1():
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.plot(x[1:-1], u2, label='finite difference')
-    ax.plot(x[1:-1], u_an[1:-1], label='analytical')
+    ax.plot(x[1:-1], u_an[1:-1], 'k', label='analytical')
+    ax.plot(x[1:-1], u2, 'ko', markersize=3, mfc='none', label='finite difference')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u(x)")
+    ax.set_title("Solution for part 1 (N=100 points)")
     plt.legend()
+    filename = os.path.join(path, 'part1.png')
+    plt.savefig(filename, dpi=300)
     plt.show()
-
-    return u2, u_an
 
 
 # Finite difference matrix
@@ -68,7 +73,6 @@ def fdmatrix(N, dx):
 
     # return the inner part of the matrix without first and last rows and columns
     return K[1:-1, 1:-1]
-
 
 
 def part2():
@@ -91,19 +95,28 @@ def part2():
     # Include boundary conditions
     sol2 = np.hstack([0,sol,0])
 
+    # Analytical solution
+    u_an = 1 - x**2
+
     # Plot
     fig = plt.figure()
     ax = fig.add_subplot(111)
-
-    ax.plot(x, sol2, label='finite difference solution')
+    
+    ax.plot(x, u_an, 'k', label='analytical solution')
+    ax.plot(x, sol2, 'ko', markersize=3,  mfc='none', label='finite difference solution')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u(x)")
+    ax.set_title("Solution for part 2 (N=100 points)")
     plt.legend()
+    filename = os.path.join(path, 'part2.png')
+    plt.savefig(filename, dpi=300)
     plt.show()
 
 
 def part3():
+
+    global path
 
     # Domain discretization
     N = 100
@@ -117,7 +130,7 @@ def part3():
     # Finite difference matrix
     K = (-2*np.eye(N) + np.diag(np.ones(N-1),k=1) + np.diag(np.ones(N-1),k=-1))/dx**2
 
-    # Strip the last row and column
+    # Strip the last row and column for bottom dirichlet boundary
     K2 = K[0:-1, 0:-1]
 
     # Top Boundary:
@@ -138,12 +151,15 @@ def part3():
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.plot(x, sol2, label='finite difference solution')
-    ax.plot(x, u_an, label='analytical solution')
+    ax.plot(x, u_an, 'k', label='analytical solution')
+    ax.plot(x, sol2, 'ko', markersize=3,  mfc='none', label='finite difference solution')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u(x)")
+    ax.set_title("Solution for part 3 (N=100 points)")
     plt.legend()
+    filename = os.path.join(path, 'part3.png')
+    plt.savefig(filename, dpi=300)
     plt.show()
 
     #  return K2
@@ -151,8 +167,10 @@ def part3():
 
 def part4():
 
+    global path
+
     # Domain discretization
-    N = 1000
+    N = 100
     xmax = 1; xmin = -1
     dx = (xmax-xmin)/(N-1)  # grid spacing
     x = np.linspace(xmin, xmax, N)
@@ -182,11 +200,14 @@ def part4():
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.plot(x, sol, label='finite difference solution')
-    ax.plot(x, u_an, label='analytical solution')
+    ax.plot(x, u_an, 'k', label='analytical solution')
+    ax.plot(x, sol, 'ko', markersize=3.0, mfc='none', label='finite difference solution')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u(x)")
+    ax.set_title("Solution for bonus (N=100 points)")
     plt.legend()
+    filename = os.path.join(path, 'bonus.png')
+    plt.savefig(filename, dpi=300)
     plt.show()
 
