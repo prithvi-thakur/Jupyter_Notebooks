@@ -4,7 +4,7 @@
 #
 #   Author: Prithvi Thakur
 #   Written in: Python v3.6.6
-#   Last Modified: 10-30-2018
+#   Last Modified: 11-20-2018
 #
 #   Clasp 410 Lab 5: Snowball earth
 #                   Solve the pde
@@ -27,7 +27,7 @@ Re = 6371e3     # Radius of earth
 So = 1367       # Solar Flux
 Cp = 4.2e6      # Heat Capacity of sea water
 dz = 50         # Depth of mixed ocean layer
-λ = 100         # Thermal Diffusivity
+λ = 10000         # Thermal Diffusivity
 ε = 0.4         # Emissivity
 σ = 5.67e-8     # Steffan-Boltzmann constant
 α = 0.3         # Albedo
@@ -113,7 +113,7 @@ def boundary(K, Δy):
     K[-1,-1] = -1
     return K/(Δy**2)
 
-# forcing term
+# area forcing term
 def forcing(T, area, Δy):
     # T_(i+1) - T_(i-1)
     tdiff = T[2::] - T[0:-2]
@@ -130,14 +130,14 @@ def forcing(T, area, Δy):
 
 # Main function
 def main():
-    global Re, λ
+    global Re , λ
 
     # Number of latitude bands: space discretization
     Nx = 18
 
     # Number of timesteps: time dicretization
     yr2sec = 365*24*60*60
-    dt = 1*yr2sec; tmax = 10000*yr2sec
+    dt = 1*yr2sec; tmax = 20000*yr2sec
     Nt = int(tmax/dt)
 
     # Domain discretization
@@ -165,18 +165,13 @@ def main():
     for j in range(1, Nt):
         
         # Area term
-        f = forcing(T[:,j-1], ar, Δy)
+        f1 = forcing(T[:,j-1], ar, Δy)
         
         # Incoming radiation term
         f2 = incoming_radiation(Sy, T[:,j-1])
-        
-        # Net forcing term
-        f_net = f + f2
-
-        #  print(f_net)
 
         L = np.eye(Nx) - dt*λ*K
-        b = T[:,j-1] + λ*dt*f_net
+        b = T[:,j-1] + dt*(λ*f1 + f2)
 
         T[:, j] = np.linalg.solve(L,b)
    
@@ -186,7 +181,7 @@ def main():
     tplot(T[:,0::it], Nx)
     energy_check(T[:,0::it], ar, tmax/yr2sec)
     
-    return T, ar
+    return T
 
 # Plot temperature isolines
 def tplot(T, Nx):
@@ -195,11 +190,25 @@ def tplot(T, Nx):
 
     ax.plot(T, np.linspace(-90,90,Nx), "k--", lw=0.4)
 
-    ax.set_xlabel("Temperature")
+    ax.set_xlabel("Temperature (K)")
     ax.set_ylabel("Latitude")
     ax.set_title("Q2 : Temperature contours (N=18 points)")
-    filename = os.path.join(path, 'tcont_q2.png')
-    plt.savefig(filename, dpi=300)
+    filename = os.path.join(path, 'tcont_q2b.png')
+    #  plt.savefig(filename, dpi=300)
+    plt.show()
+
+# Diffusivity vs. global steady state 
+def diff_plot(T, Nx):
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.plot(T, np.linspace(-90,90,Nx), "k--", lw=0.4)
+
+    ax.set_xlabel("Global steady state temperature (K)")
+    ax.set_ylabel("Latitude")
+    ax.set_title("Q2 : Steady state temperature for different diffusivity (N=18 points)")
+    filename = os.path.join(path, 'tdiff_q2b.png')
+    #  plt.savefig(filename, dpi=300)
     plt.show()
 
 # Check if the energy is conserved
@@ -216,10 +225,10 @@ def energy_check(T, area, tmax):
     ax.plot(x_axis, Tavg, ".")
 
     ax.set_xlabel("Time (years)")
-    ax.set_ylabel("Global avg. temperature")
+    ax.set_ylabel("Global avg. temperature (K)")
     ax.set_title("Global avg. temperature in time")
-    filename = os.path.join(path, 'tavg_q2.png')
-    plt.savefig(filename, dpi=300)
+    filename = os.path.join(path, 'tavg_q2b.png')
+    #  plt.savefig(filename, dpi=300)
     plt.show()
 
-T, area = main()
+T = main()
