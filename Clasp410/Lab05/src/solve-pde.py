@@ -27,8 +27,8 @@ Re = 6371e3     # Radius of earth
 So = 1367       # Solar Flux
 Cp = 4.2e6      # Heat Capacity of sea water
 dz = 50         # Depth of mixed ocean layer
-λ = 10000         # Thermal Diffusivity
-ε = 0.4         # Emissivity
+λ = 80         # Thermal Diffusivity
+ε = 0.61         # Emissivity
 σ = 5.67e-8     # Steffan-Boltzmann constant
 α = 0.3         # Albedo
 ρ = 1027        # Density of the ocean
@@ -78,8 +78,8 @@ def insolation_m():
 
 # Incoming long wave and shortwave radiation:
 # added to the forcing term
-def incoming_radiation(Sy, T):
-    global α, ε, σ, ρ, dx, Cp, So
+def incoming_radiation(Sy, T, α):
+    global ε, σ, ρ, dx, Cp, So
     
     f2 = (Sy*(1-α) - ε*σ*T**4)/(dz*Cp*ρ)
 
@@ -155,9 +155,16 @@ def main():
     # Pre-allocate the unknown T
     T = np.zeros((Nx, Nt))
 
+    # Albedo
+    α = 0.3*np.ones(Nx) 
+
     # Initial condition
     T[:,0] = np.array([-47, -19, -11, 1, 9, 14, 19, 23, 25, 25, 23, 19, \
                         14, 9, 1, -11, -19, -47])
+
+    #  T[:,0] = (-60)*np.ones(Nx)
+
+
     # Celsius to Kelvin
     T[:,0] = T[:,0] + 273
      
@@ -167,8 +174,12 @@ def main():
         # Area term
         f1 = forcing(T[:,j-1], ar, Δy)
         
+        # Change albedo according to temp.
+        #  α[T[:,j-1] < 263] = 0.6
+        #  α[T[:,j-1] > 263] = 0.3
+        
         # Incoming radiation term
-        f2 = incoming_radiation(Sy, T[:,j-1])
+        f2 = incoming_radiation(Sy, T[:,j-1], α)
 
         L = np.eye(Nx) - dt*λ*K
         b = T[:,j-1] + dt*(λ*f1 + f2)
@@ -178,8 +189,8 @@ def main():
     # Plot only 100 points
     it = int(Nt/100)
 
-    tplot(T[:,0::it], Nx)
-    energy_check(T[:,0::it], ar, tmax/yr2sec)
+    tplot(T[:,0::it] - 273, Nx)
+    energy_check(T[:,0::it] - 273, ar, tmax/yr2sec)
     
     return T
 
