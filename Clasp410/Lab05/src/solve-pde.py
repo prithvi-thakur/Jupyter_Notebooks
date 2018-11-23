@@ -27,28 +27,28 @@ Re = 6371e3     # Radius of earth
 So = 1367       # Solar Flux
 Cp = 4.2e6      # Heat Capacity of sea water
 dz = 50         # Depth of mixed ocean layer
-λ = 80         # Thermal Diffusivity
-ε = 0.61         # Emissivity
+λ = 1e-2         # Thermal Diffusivity
+ε = 0.595         # Emissivity
 σ = 5.67e-8     # Steffan-Boltzmann constant
-α = 0.3         # Albedo
 ρ = 1027        # Density of the ocean
 
+
+
 # Define insolation setup
-def insolation(Nx, φ):
-    global So
+def insolation(Nx, φ, So):
     max_tilt = 23.5
     days_in_year = 365
     hours_in_day = 24
     zonal_degrees = 360
      
     dlong = 0.01    # use 1/100th of a degree in summing over latitudes
-    total_solar = 0
+    total_solar = 0.0
     
-    for hour in range(1,hours_in_day):
-        hour_angle = zonal_degrees * hour /hours_in_day
+    for hour in range(hours_in_day):
+        hour_angle = zonal_degrees * (hour+1) /hours_in_day
         
-        for longitude in range(1,int(zonal_degrees/dlong)):
-            sun_angle = longitude - hour_angle
+        for longitude in range(int(zonal_degrees/dlong)):
+            sun_angle = (longitude+1) - hour_angle
             total_solar += So* max(0.0, np.cos(np.pi*sun_angle/180)) 
     
     So = total_solar/(hours_in_day*zonal_degrees/dlong)
@@ -57,10 +57,10 @@ def insolation(Nx, φ):
     insolation = np.zeros(Nx)
     
     # Accumulate normalized insolation through an year
-    for day in range(1,days_in_year):
-        tilt = max_tilt*np.cos(2*np.pi*day/days_in_year)
+    for day in range(days_in_year):
+        tilt = max_tilt*np.cos(2*np.pi*(day+1)/days_in_year)
     
-        for j in range(1,Nx):
+        for j in range(Nx):
             zenith = min(φ[j]+tilt, 90.0)
             insolation[j] += np.cos(np.deg2rad(zenith))
     
@@ -141,11 +141,8 @@ def main():
     Nt = int(tmax/dt)
 
     # Domain discretization
-    φ, ar, Δy = domain(Nx)
-    
-    # Insolation
-    Sy =insolation_m()  #insolation(Nx, φ)
-    
+    φ, area, Δy = domain(Nx)
+   
     # Finite difference matrix: second derivative
     Ko = fdm(Nx)
     K = boundary(Ko, Δy)
@@ -155,57 +152,86 @@ def main():
     # Pre-allocate the unknown T
     T = np.zeros((Nx, Nt))
 
-    # Albedo
-    α = 0.3*np.ones(Nx) 
-
     # Initial condition
     T[:,0] = np.array([-47, -19, -11, 1, 9, 14, 19, 23, 25, 25, 23, 19, \
                         14, 9, 1, -11, -19, -47])
 
     #  T[:,0] = (-60)*np.ones(Nx)
 
-
     # Celsius to Kelvin
     T[:,0] = T[:,0] + 273
-     
-    # Time-step
-    for j in range(1, Nt):
-        
-        # Area term
-        f1 = forcing(T[:,j-1], ar, Δy)
-        
-        # Change albedo according to temp.
-        #  α[T[:,j-1] < 263] = 0.6
-        #  α[T[:,j-1] > 263] = 0.3
-        
-        # Incoming radiation term
-        f2 = incoming_radiation(Sy, T[:,j-1], α)
-
-        L = np.eye(Nx) - dt*λ*K
-        b = T[:,j-1] + dt*(λ*f1 + f2)
-
-        T[:, j] = np.linalg.solve(L,b)
+    # Solar Flux
+    So = 1367
    
-    # Plot only 100 points
-    it = int(Nt/100)
+    # Question 5: simulations with initial temperature feedback
 
-    tplot(T[:,0::it] - 273, Nx)
-    energy_check(T[:,0::it] - 273, ar, tmax/yr2sec)
+    # store the values of γ (solar multiplier) and final avg temp
+    tmp = np.linspace(0.6,1.4,10)
+    γ = np.hstack([tmp[:-1], tmp[::-1]])
+
+    γ = [200.55]
+
+    nos = len(γ)     # number of simulations
+    Tavg = np.zeros(nos)
+    ice_frac = np.zeros(nos)
     
-    return T
+    for sim_num in range(nos):
+        So = γ[sim_num]*So
+
+        # Insolation
+        Sy = insolation(Nx, φ, So)
+        
+        # Albedo
+        α = 0.3*np.ones(Nx) 
+         
+        # Time-step
+        for j in range(1, Nt):
+            
+            # Area term
+            f1 = forcing(T[:,j-1], area, Δy)
+            
+            # Change albedo according to temp.
+            α[T[:,j-1] < 263] = 0.6
+            α[T[:,j-1] > 263] = 0.3
+            
+            # Incoming radiation term
+            f2 = incoming_radiation(Sy, T[:,j-1], α)
+
+            L = np.eye(Nx) - dt*λ*K
+            b = T[:,j-1] + dt*(λ*f1 + f2)
+
+            T[:, j] = np.linalg.solve(L,b)
+       
+        # Plot only 100 points
+        it = int(Nt/100)
+        
+        Tavg[sim_num] = glob_avg_temp(T-273, area)
+        ice_frac[sim_num] = ice_fraction(T-273, area)
+
+        tplot(T[:,0::it] - 273, Nx, sim_num)
+        #  energy_check(T[:,0::it] - 273, area, tmax/yr2sec)
+       
+        # Update initial temperature for next simulation
+        T[:,0] = T[:,-1].copy()
+
+    plot_multiplier(Tavg, ice_frac, γ)
+    return T, Tavg, ice_frac, γ
 
 # Plot temperature isolines
-def tplot(T, Nx):
+def tplot(T, Nx, sim_num):
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.plot(T, np.linspace(-90,90,Nx), "k--", lw=0.4)
+    ax.plot(T, np.linspace(-90,90,Nx), "k--", lw=0.4, alpha=0.4)
+    ax.plot(T[:,0], np.linspace(-90,90,Nx), "k--", lw=1, label='Initial')
+    ax.axvline(-10, label = "Ice threshold")
 
-    ax.set_xlabel("Temperature (K)")
+    ax.set_xlabel("Temperature (Celsius)")
     ax.set_ylabel("Latitude")
-    ax.set_title("Q2 : Temperature contours (N=18 points)")
-    filename = os.path.join(path, 'tcont_q2b.png')
-    #  plt.savefig(filename, dpi=300)
+    ax.set_title(r"Temperature contours")
+    ax.legend()
+    filename = os.path.join(path, 'tcont_8'+str(sim_num)+'.png')
+    plt.savefig(filename, dpi=300)
     plt.show()
 
 # Diffusivity vs. global steady state 
@@ -218,7 +244,7 @@ def diff_plot(T, Nx):
     ax.set_xlabel("Global steady state temperature (K)")
     ax.set_ylabel("Latitude")
     ax.set_title("Q2 : Steady state temperature for different diffusivity (N=18 points)")
-    filename = os.path.join(path, 'tdiff_q2b.png')
+    filename = os.path.join(path, 'tdiff_q6.png')
     #  plt.savefig(filename, dpi=300)
     plt.show()
 
@@ -236,10 +262,39 @@ def energy_check(T, area, tmax):
     ax.plot(x_axis, Tavg, ".")
 
     ax.set_xlabel("Time (years)")
-    ax.set_ylabel("Global avg. temperature (K)")
+    ax.set_ylabel("Global avg. temperature (celsius)")
     ax.set_title("Global avg. temperature in time")
-    filename = os.path.join(path, 'tavg_q2b.png')
+    filename = os.path.join(path, 'tavg_q5.png')
     #  plt.savefig(filename, dpi=300)
     plt.show()
 
-T = main()
+# Calculate the final global avg. temperature
+def glob_avg_temp(T, area):
+    return (T[:,-1]*area).sum()/area.sum()
+
+# Calculate fraction of planet covered with ice
+def ice_fraction(T, area):
+    return (area[T[:,-1] < -10]).sum()/area.sum()
+
+# Plot avg. temp and ice fraction vs γ
+def plot_multiplier(Tavg, ice_frac, γ):
+    fig, ax1 = plt.subplots()
+    color1 = 'tab:blue'
+    ax1.set_xlabel("Solar multipler γ")
+    ax1.set_ylabel("Fraction of planet covered with ice")
+    ax1.plot(γ, ice_frac, 'o--', color=color1)
+    ax1.tick_params(axis='y', labelcolor=color1)
+
+    ax2 = ax1.twinx()
+    color2 = 'tab:red'
+    ax2.set_ylabel("Global average temperature at steady state (Celsius)")
+    ax2.plot(γ, Tavg, '*--', color=color2)
+    ax2.tick_params(axis='y', labelcolor=color2)
+
+    plt.suptitle("Ice fraction and avg. temp as a function of solar multiplier")
+    #  fig.tight_layout()
+    plt.legend()
+    filename = os.path.join(path, 'ratios_6.png')
+    #  plt.savefig(filename, dpi=300)
+
+T, Tavg, ice_frac, gamma = main()
