@@ -71,9 +71,6 @@ L = dot(f, v)*dx + dot(T, v)*ds
 u = Function(V)
 solve(a == L, u, bc)
 
-# Plot solution
-plot(u, title='Displacement', mode='displacement')
-
 # Plot stress
 s = sigma(u) - (1./3)*tr(sigma(u))*Identity(d)  # deviatoric stress
 von_Mises = sqrt(3./2*inner(s, s))
@@ -103,14 +100,15 @@ plt.savefig(filename, dpi=300)
 plt.show()
 
 
-#  # Mesh plot
-#  coor = mesh.coordinates()
+# Mesh plot
+coor = mesh.coordinates()
 
-#  fig = plt.figure()
-#  ax = fig.add_subplot(111, projection = '3d')
+fig = plt.figure()
+ax = fig.add_subplot(111, projection = '3d')
 
 #  ax.scatter(coor[:,0], coor[:,1], coor[:,2])
+ax.plot(vv, "k.")
 
-#  filename = path+"mesh"
-#  plt.savefig(filename, dpi=300)
-#  plt.show()
+filename = path+"vonmises"
+plt.savefig(filename, dpi=300)
+plt.show()
