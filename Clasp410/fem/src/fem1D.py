@@ -44,7 +44,7 @@ def phi(j, x):
     elif(x > x_minus and x< x_j):
         phi_point = (1/h)*x
     elif(x > x_j and x < x_plus):
-        phi_point = (-1//hj)*x
+        phi_point = (-1/h)*x
     else:
         phi_point = 0
 
@@ -106,5 +106,18 @@ ax.set_title("1D Finite Element Method")
 ax.set_xlabel("x")
 ax.set_ylabel("u(x)")
 plt.legend()
+fname=os.path.join(path, 'solution.pdf')
+plt.savefig(fname, dpi=300)
 plt.show()
 
+# Plot error
+fig = plt.figure(figsize = (9,6))
+ax = fig.add_subplot(111)
+
+ax.plot(solution- anal[1:M+1], "k.")
+ax.set_title("Errors ")
+ax.set_xlabel("x")
+ax.set_ylabel("error")
+fname=os.path.join(path, 'errorspdf')
+plt.savefig(fname, dpi=300)
+plt.show()
