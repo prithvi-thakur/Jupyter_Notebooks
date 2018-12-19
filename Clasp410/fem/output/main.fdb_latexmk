@@ -1,9 +1,11 @@
 # Fdb version 3
-["pdflatex"] 1544943182 "main.tex" "main.pdf" "main" 1544943182
+["pdflatex"] 1544978919 "main.tex" "main.pdf" "main" 1544978919
   "../figs/fe_basis1.pdf" 1544921881 12295 bc2322267b5522e91e8a18acadffff96 ""
   "../figs/fe_err.pdf" 1544842698 11518 771812596602169cd2ae178d9237b34d ""
   "../figs/fe_sol.pdf" 1544842698 14928 ec64e83f241946bfbf1b4c7bf0a29cd7 ""
   "../figs/fig1.png" 1544879715 37816 2095442ad31f3fd82edda406c6a3abe7 ""
+  "../figs/u.pdf" 1544976902 19937 905b5638410fb4fc6920db991f9a190b ""
+  "../figs/vm.pdf" 1544976902 18150 be42fbbb4ebe96ec335e39a5e138651d ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1480098701 1328 c834bbb027764024c09d3d2bf908b5f0 ""
@@ -62,9 +64,9 @@
   "/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1535219931 2350277 a699055bee05bf8a40b0504752487295 ""
   "/usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt" 1495593487 4129592 0e6cfee100d68e6d96b92c0258f2ff73 ""
   "/usr/local/texlive/2017/texmf.cnf" 1495593465 577 2b71d4d888f9e5560b2e99985915a9fa ""
-  "main.aux" 1544943172 1540 e023cfe1e52e322986bfad9074a84829 ""
-  "main.tex" 1544943182 11687 2d9b3192262d9293761b4e984bda5d63 ""
+  "main.aux" 1544978270 2006 312528258a2ec91f712b955ca4635771 ""
+  "main.tex" 1544978918 15179 4d56f859a322bf399195dcf3f4b17e4a ""
   (generated)
-  "main.aux"
-  "main.pdf"
   "main.log"
+  "main.pdf"
+  "main.aux"

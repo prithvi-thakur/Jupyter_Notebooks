@@ -96,6 +96,12 @@ INPUT ../figs/fe_sol.pdf
 INPUT ../figs/fe_err.pdf
 INPUT ../figs/fe_err.pdf
 INPUT ../figs/fe_err.pdf
+INPUT ../figs/u.pdf
+INPUT ../figs/u.pdf
+INPUT ../figs/u.pdf
+INPUT ../figs/vm.pdf
+INPUT ../figs/vm.pdf
+INPUT ../figs/vm.pdf
 INPUT main.aux
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb

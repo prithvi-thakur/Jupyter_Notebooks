@@ -56,7 +56,7 @@ class setup:
     def f(self,x):       # Right hand side function
         return 1
     
-    def rhs(self,j,x):
+    def rhs(self,j,x):   # Right hand size of the matrix
         return self.f(x)*self.basis_function(j,x)
 
 
@@ -108,22 +108,23 @@ def main():
     # Plot errors
     #  error = np.abs(anal[1:S.node+1] - solution)
     #  plot_errors(S.part,error)
-    
-    basis = np.zeros((S.node+2,S.node))
-    for i in range(S.node-2):
-        basis[:,i] = S.basis_function(i,S.part)
+   
+    # Plot basis functions for demonstration
+    #  basis = np.zeros((S.node+2,S.node))
+    #  for i in range(S.node-2):
+        #  basis[:,i] = S.basis_function(i,S.part)
 
-    fig = plt.figure(figsize=(9,6))
-    ax = fig.add_subplot(111)
+    #  fig = plt.figure(figsize=(9,6))
+    #  ax = fig.add_subplot(111)
 
-    ax.plot(S.part, basis[:,3:6],"k--")
-    ax.set_title("Hat Basis functions")
-    ax.set_xlabel("x")
-    ax.set_ylabel(r"$\phi (x)$")
+    #  ax.plot(S.part, basis[:,3:6],"k--")
+    #  ax.set_title("Hat Basis functions")
+    #  ax.set_xlabel("x")
+    #  ax.set_ylabel(r"$\phi (x)$")
 
-    fname = os.path.join(path,'fe_basis1.pdf')
-    plt.savefig(fname,dpi=300)
-    plt.show()
+    #  fname = os.path.join(path,'fe_basis1.pdf')
+    #  plt.savefig(fname,dpi=300)
+    #  plt.show()
 
 
 def plot_solution(part,solution,anal):

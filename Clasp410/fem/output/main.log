@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  16 DEC 2018 01:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  16 DEC 2018 11:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -599,31 +599,44 @@ File: ../figs/fe_err.pdf Graphic file (type pdf)
  <use ../figs/fe_err.pdf>
 Package pdftex.def Info: ../figs/fe_err.pdf used on input line 193.
 (pdftex.def)             Requested size: 292.6908pt x 195.1272pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 198--201
-
- []
-
-[6]
-Overfull \vbox (44.84634pt too high) has occurred while \output is active []
-
- [7 <../figs/fe_sol.pdf> <../figs/fe_err.pdf
+ [6] [7 <../figs/fe_sol.pdf> <../figs/fe_err.pdf
 
 pdfTeX warning: pdflatex (file ../figs/fe_err.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] [8] (./main.aux) ) 
+>] <../figs/u.pdf, id=151, 462.52798pt x 346.89601pt>
+File: ../figs/u.pdf Graphic file (type pdf)
+ <use ../figs/u.pdf>
+Package pdftex.def Info: ../figs/u.pdf used on input line 207.
+(pdftex.def)             Requested size: 231.26341pt x 173.44757pt.
+ <../figs/vm.pdf, id=152, 462.52798pt x 346.89601pt>
+File: ../figs/vm.pdf Graphic file (type pdf)
+ <use ../figs/vm.pdf>
+Package pdftex.def Info: ../figs/vm.pdf used on input line 212.
+(pdftex.def)             Requested size: 231.26341pt x 173.44757pt.
+ [8 <../figs/u.pdf>]
+./main.tex:225: Misplaced alignment tab character &.
+l.225 $[4]$ Komatitsch, D., &
+                              Tromp, J. (1999). Introduction to the spectral...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+[9 <../figs/vm.pdf>] [10] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 2448 strings out of 492995
- 31888 string characters out of 6132704
+ 2458 strings out of 492995
+ 32045 string characters out of 6132704
  102562 words of memory out of 5000000
- 5973 multiletter control sequences out of 15000+600000
+ 5981 multiletter control sequences out of 15000+600000
  5781 words of font info for 22 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,16n,25p,1024b,222s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,16n,25p,1024b,224s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main.pdf (9 pages, 225331 bytes).
+Output written on main.pdf (11 pages, 264246 bytes).
 PDF statistics:
- 199 PDF objects out of 1000 (max. 8388607)
- 85 compressed objects within 1 object stream
+ 290 PDF objects out of 1000 (max. 8388607)
+ 103 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

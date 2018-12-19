@@ -45,7 +45,7 @@ While the finite difference methods are easier to implement, they do not work we
     \caption{Stress contours of a deformed can[1]. Such a complex geometry is difficult to implement in finite difference or pseudospctral methods.}
 \end{figure}
 
-In this project, I explain the concept and implementation behind the finite element methods in one dimension. We will work with a simple one dimensional Navier-Stokes equation, which is useful in the applications of linear elasticity, e.g., stresses on a rod.
+In this project, I explain the concept and implementation behind the finite element methods in one dimension. We will work with a simple one dimensional Navier-Stokes equation, which is useful in the applications of linear elasticity, e.g., stresses on a rod. I will then show an example using python's finite element solver, fenics, for a two dimensional static linear elasticity problem.
 
 \section{Linear Elasticity: Navier-Stokes in one dimension}
 Consider a rod of finite length made of linearly elastic material. We consider the rod to be in steady state, i.e., a load was applied slowly enough so that there is no acceleration anywhere on the rod, and it was applied sufficiently long ago so that all the vibrations have died out. The fundamental equations for static response of the elastic rod are [2]:
@@ -194,9 +194,34 @@ We solve the system of linear equation using numpy's linear solver {\tt numpy.li
     \caption{The errors in the finite element solution. These are in the order of $10^{-6}$, which is greater than the machine precision error. The errors would be significantly reduced if we used higher order basis functions.}
 \end{figure}
 
+Next, we try a more complicated solution to linear elasticity using fenics. Fenics is a finite element solver written in C++ but wrapped around python, so that we only need to specify the weak form of the differential equation with the appropriate boundary conditions, and the solver will assemble the matrices and compute the quadrature integration for us. We start with the same equations as (1,2,3) but in two dimensions. The entire problem with boundary conditions can be written as:
+\begin{align}
+    -\nabla.\sigma = f in \Omega, \\
+    \sigma = \lambda tr(\varepsilon)I + 2\mu\varepsilon, \\
+    \varepsilon = \frac{1}{2}(\nabla u + (\nabla u)^T)
+\end{align}
+
+where $\Omega$ is the physical domain, $\lambda, \mu$ are lame's parameters for elasticity, and $I$ is the identitiy matrix. We assume a two dimensional sheet fixed at one end and traction free at all other ends hanging under the influence of it's own gravity. We wish to compute the displacement and stresses at the steady state. The boundary conditions for this problem can be described as $u = u_D = (0,0)$ at $x = 0$, and $f = (0,-\rho g)$. For the rest of the traction free domain, $T = 0$. We write this set of equations in the weak form similar to what is desribed above, and solve it in fenics to obtain the steady state stresses and displacements of the medium (Fig. 4, 5). 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.5]{u.pdf}
+    \caption{The displacement at steady state. We use unit dimensions for all quantities. It is fixed at the left end, therefore we see zero displacement on the left end.}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.5]{vm.pdf}
+    \caption{The stresses at steady state. Since the left end is fixed, therefore is is subjected to most stresses. The right freely hanging end has near zero stresses.}
+\end{figure}
+
+\section{Conclusions}
+We have computed the solution to a one dimensional navier stokes equation and derived the finite element formulation for it. We further extended this to two dimensions using the python package fenics. Although the finite element methods are difficult to program, they have several advantages over finite differences and pseudospectral methods in terms of geometrical complexity and physical hetereogeneity. Therefore, finite element methods are an ideal candidate for solving real world problems that involve these complexities. 
+
+My future work would be to derive a model for a long term fault-slip to simulate multiple earthquakes and aseismic slips on a single fault. This would require solving the elastostatic and elastodynamic equations of motion with waves propagating in the medium, and switching between the two using some criteria. Finite element methods are an attractive candidate for these problems since they are multiscale in space. We want to simulate near fault large heterogeneities as well as the micro scale frictional heterogeneities. Although finite element methods in itself are not well suited for hyperbolic partial differential equations, using a discontinuous galerkin or spectral element methods is shown to work well [4].
+
 \section{References}
 $[1]$ http://faculty.washington.edu/nsniadec/ME478/S13/ \\* 
 $[2]$ Achenbach, J. (2012). Wave propagation in elastic solids (Vol. 16). Elsevier.\\*
 $[3]$ https://www.wikiwand.com/en/Galerkin\_method. \\*
-
+$[4]$ Komatitsch, D., & Tromp, J. (1999). Introduction to the spectral element method for three-dimensional seismic wave propagation. Geophysical journal international, 139(3), 806-822.
+$[5]$ https://fenicsproject.org
 \end{document}
