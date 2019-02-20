@@ -26,8 +26,8 @@ class params:
     σ = 100   # Normal Stress = 100 MPa
     μo = 0.6    # Reference friction coefficient = 0.6
     Vo = 1e-6   # Reference slip velocity = 10^(-6) m/s
-    Dc = 0.1   # Critical slip distance = 1 m
-    θo = 0.001  # Initial state variable
+    Dc = 0.04   # Critical slip distance = 1 m
+    θo = 1  # Initial state variable
 
     a = 0.012   # Rate-state parameter a
     b = 0.016   # Rate-state parameter b
@@ -47,7 +47,11 @@ def evolution(θt, dt, Vt, Dc):
 
 # Initial sliding velocity assumption
 def initial_velocity(N):
-    return np.linspace(1e-2,5, num=N)
+    #  return np.linspace(1e-2,5, num=N)
+    v1 = np.linspace(1e-3, 1e-1, num=int(N/3))
+    v2 = np.log(np.linspace(1e-1, 5, num=int(N/3)))
+    v3 = np.linspace(5, 1, num= N - 2*int(N/3))
+    return np.hstack([v1, v2, v3])
 
 def solver(params, N):
     #  x = np.linspace(0,100*params.Dc, num=N)
@@ -62,13 +66,13 @@ def solver(params, N):
 
     for it in range(len(time)-1):
         dt = diff_t[0]  # dt is constant
-        θ[it+1] = evolution(θ[it], dt, V[it], params.Dc)
+        θ[it+1] = evolution(θ[it], dt, V[it+1], params.Dc)
         τ[it+1] = rsf(params, V[it+1], θ[it+1])
-        x[it] = V[it]*time[it] + x[it]
+        x[it+1] = V[it]*time[it] + x[it]
         
-        print(θ[it])
-        print(τ[it])
-    return θ[1::], τ[1::], V[0:-1], x[0:-1]
+        #  print(θ[it])
+        #  print(τ[it])
+    return θ[1::], τ[1::], V[1::], x[1::]
 
 def main():
     p = params()
@@ -78,18 +82,22 @@ def main():
 
 
 
-def plot(x,y):
-    fig = plt.figure(figsize=(8,6))
-    ax = fig.add_subplot(111)
-    ax.plot(x, y, ".-")
-    ax.set_xlabel("Slip (m)")
-    ax.set_ylabel("Shear stress (MPa)")
-    ax.set_title("Stress evolution for a linear slip velocity (Dc = 0.1m)")
+def plot(x1,x2,y):
+    fig = plt.figure(figsize=(12,5))
+    ax1 = fig.add_subplot(121)
+    ax1.plot(x1, y, ".-")
+    ax1.set_xlabel("Slip velocity (m/s)")
+    ax1.set_ylabel("Shear stress (MPa)")
+    ax2 = fig.add_subplot(122)
+    ax2.plot(x2, y, ".-")
+    ax2.set_xlabel("Slip (m)")
+    #  ax2.set_ylabel("Shear stress (MPa)")
+    plt.suptitle("Stress evolution for a linear slip velocity (Dc = 0.1m)")
     #  plt.legend()
     filename = os.path.join(path, 'fig1.pdf')
     plt.savefig(filename, dpi=300)
     plt.show()
 
 
-stress, state, V, x = main()
-plot(x, stress)
+state, stress, V, x = main()
+plot(V, x, stress)
