@@ -26,13 +26,13 @@ class params:
     σ = 100   # Normal Stress = 100 MPa
     μo = 0.6    # Reference friction coefficient = 0.6
     Vo = 1e-6   # Reference slip velocity = 10^(-6) m/s
-    Dc = 0.04   # Critical slip distance = 1 m
+    Dc = 0.4   # Critical slip distance = 1 m
     θo = 1  # Initial state variable
 
     a = 0.012   # Rate-state parameter a
     b = 0.016   # Rate-state parameter b
 
-    tmax = 1    # maximum simulation time in seconds
+    tmax = 10    # maximum simulation time in seconds
 
 # This function takes the rate-state parameters and the current slip rate to return the current shear stress:
 def rsf(params, V, θ):
@@ -48,10 +48,11 @@ def evolution(θt, dt, Vt, Dc):
 # Initial sliding velocity assumption
 def initial_velocity(N):
     #  return np.linspace(1e-2,5, num=N)
-    v1 = np.linspace(1e-3, 1e-1, num=int(N/3))
-    v2 = np.log(np.linspace(1e-1, 5, num=int(N/3)))
-    v3 = np.linspace(5, 1, num= N - 2*int(N/3))
-    return np.hstack([v1, v2, v3])
+    return np.linspace(1e-2, 4, num=N)
+    #  v1 = (np.linspace(1e-1, 1, num=int(N/3)))
+    #  v2 = (np.linspace(1, 5, num=int(N/3)))
+    #  v3 = (np.linspace(5, 1, num= N - 2*int(N/3)))
+    #  return np.hstack([v1, v2, v3])
 
 def solver(params, N):
     #  x = np.linspace(0,100*params.Dc, num=N)
@@ -72,18 +73,18 @@ def solver(params, N):
         
         #  print(θ[it])
         #  print(τ[it])
-    return θ[1::], τ[1::], V[1::], x[1::]
+    return θ[1::], τ[1::], V[1::], x[1::], time[1::]
 
 def main():
     p = params()
-    N = 100
+    N = 80
     
     return solver(p, N)
 
 
 
 def plot(x1,x2,y):
-    fig = plt.figure(figsize=(12,5))
+    fig = plt.figure(figsize=(10,4))
     ax1 = fig.add_subplot(121)
     ax1.plot(x1, y, ".-")
     ax1.set_xlabel("Slip velocity (m/s)")
@@ -92,12 +93,23 @@ def plot(x1,x2,y):
     ax2.plot(x2, y, ".-")
     ax2.set_xlabel("Slip (m)")
     #  ax2.set_ylabel("Shear stress (MPa)")
-    plt.suptitle("Stress evolution for a linear slip velocity (Dc = 0.1m)")
+    plt.suptitle("Stress evolution for a nonlinear slip velocity (Dc = 0.4 m)")
     #  plt.legend()
-    filename = os.path.join(path, 'fig1.pdf')
+    filename = os.path.join(path, 'fig4.pdf')
     plt.savefig(filename, dpi=300)
     plt.show()
 
+def plot2(v,t):
+    fig = plt.figure(figsize=(5,4))
+    ax1 = fig.add_subplot(111)
+    ax1.plot(t, v, ".-")
+    ax1.set_xlabel("Time (s)")
+    ax1.set_ylabel("Slip Velocity (m/s)")
+    ax1.set_title("Assumed Slip Velocity in time")
+    filename = os.path.join(path, 'fig4_v.pdf')
+    plt.savefig(filename, dpi=300)
+    plt.show()
 
-state, stress, V, x = main()
+state, stress, V, x, time = main()
 plot(V, x, stress)
+plot2(V, time)
