@@ -4,6 +4,7 @@
 \usepackage{subfig}
 \usepackage{enumerate}
 \usepackage{fourier}
+\usepackage{booktabs}
 \usepackage[T1]{fontenc}
 % \usepackage[letter,width=150mm, top=30mm, bottom=30mm]{geometry}
 \usepackage[font={footnotesize}]{caption}
@@ -15,143 +16,166 @@
 \setlength{\parskip}{1em}
 \graphicspath{{../figs/}}
 
-\title{Practice Session 04: Energy Partitioning of Earthquake}
+\title{Practice Session 05: Brune Spectral Ratio}
 \author{Prithvi Thakur}
-\date{Feb 27, 2019}
+\date{Mar 11, 2019}
 
 \begin{document}
 
 \maketitle
 
 % Problem 1
-\section*{Stresses on the fault}
-The effective normal stress ($\sigma_n$) increases linearly with depth ($z$), and the approxiamte gradient is $\sim 17\ MPa$.
+\section*{Synthetic Spectral Ratio}
+We construct a spectral ratio for for a frequency range of $3 - 200$ Hz and a moment ratio ($M_{01}/M_{02}$) of $100$. The corner frequencies are $fc_1 = 20$ Hz and $fc_2 = 50$ Hz.
+
+The spectral ratio is given by:
 \begin{equation}
-\sigma_n = 17z\ MPa
+    R = \frac{u_1(f)}{u_2(f)} = \frac{M_{01}}{M_{02}}\big(\frac{1 + (f/fc_2^2)}{1 + (f/fc_1^2)}\big)
 \end{equation}
 
-The static and dynamic shear strength depends on the assumed coefficient of friction ($\mu_s$ and $\mu_d$ respectively) and the effective normal stress as follows:
-\begin{equation}
-    \begin{aligned}
-        \tau_s &= \mu_s \sigma_n \\
-        \tau_d &= \mu_d \sigma_d \\
-    \end{aligned}
-\end{equation}
-
-We use the values $0.6$ and $0.4$ for the static and dynamic coefficient of friction respectively.
-
-Given a constant stress drop ($\Delta\sigma$) of $3\ MPa$, we can compute the shear stress before the earthquake ($\tau_0$) as:
-\begin{equation}
-    \tau_0 = \Delta\sigma + \tau_d
-\end{equation}
-
-\section*{Seismic Moment and Slip Calculation}
-Given a moment magnitude ($M_w$) of $5$, we can calculate the seismic moment ($M_0$) as follows:
-\begin{equation}
-    M_0 = 10^{[\frac{3}{2}(10.7 + M_w) - 7]}
-\end{equation}
-
-The rupture dimension ($L$) is approximated as:
-\begin{equation}
-    L \sim \big(\frac{M_0}{\Delta\sigma}\big)^{\frac{1}{3}}
-\end{equation}
-
-The rupture area would therefore be $L^2$, and the final slip ($D_f$) is given by $\Delta\sigma L/G$, where $G$ is the shear modulus.
-
-Based on these calculations and initial assumptions, we obtain the following values for a $M_w = 5$ earthquake:
-\begin{equation}
-    \begin{aligned}
-        &M_w = 5 \\
-        &\mu_s = 0.6 \\
-        &\mu_d = 0.2 \\
-        &M_0 = 3.55 \times 10^{16}\ Nm \\
-        &L = 2279\ m \\
-        &S = L^2 = 5.2 \times 10^6\ m^2 \\
-        &D_f = 0.23\ m \\
-        &D_c = 0.1\ m
-    \end{aligned}
-\end{equation}
-
-where $D_c$ is the critical slip distance for the transition from static to dynamic friction.
-
-\section*{Energy Calculations}
-We use a simple linear slip-weakening model for calculations of energies. Fig. 1 shows the relation between stress and slip for the slip-weakening model. Based on this figure, the fracture energy ($E_g$) is estimated as the area $A'EC$ and the frictional/heat energy ($E_f$) is estimated as the area $OCBD$. The radiated energy ($E_r$) can be approximated as the area $ABC$. Therefore, using our variables defined above, we can estimate the energies as:
-\begin{equation}
-    \begin{aligned}
-        E_g &= \frac{1}{2}\ D_c\ (\tau_s - \tau_d) S \\
-        E_f &= D_f\ \tau_d S \\
-        E_r &= \frac{1}{2}\ D_f\ (\tau_0 - \tau_d) S
-    \end{aligned}
-\end{equation}
-
-Also, the total potential energy of the system is approximated as:
-\begin{equation}
-    \Delta W = \frac{1}{2}(\tau_0 + \tau_f) S D_f
-\end{equation}
+Here $R$ is the spectral ratio. The brune spectral ratio without noise is shown in Fig. 1. The synthetic spectral ratio with added uniformly distributed white noise with a peak amplitude of 5 is shown in Fig. 2
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[scale=0.6]{eg.png}
-    \caption{Ideal slip weakening model (Kanamori and Rivera, 2006)}
+    \includegraphics[scale=0.7]{fig1.pdf}
+    \caption{Brune's spectral ratio without noise}
 \end{figure}
-
-The upper bound of radiated energy can also be estimated by subtracting the frictoin and fracture energy from the total potential energy, but this method gives negative values for radiated energies for the given $D_c$ and the moment magnitude. Therefore, we use the area of triangle to estimate the radiated energies for our calculations.
-
-\section*{Results}
-We show the energy partitioning at depth intervals of $1\ km$ from $3-15\ km$ and then their variation in depth. In our calculations, the radiated energy, as calculated from the area of the triangle, only depends on the stress drop and is constant with depth, but the relative contribution changes.
-
 \begin{figure}[!htb]
     \centering
-    \includegraphics[scale=0.5]{depth3.pdf}\\
-    \includegraphics[scale=0.5]{depth4.pdf}\\
-    % \caption{Ideal slip weakening model (Kanamori and Rivera, 2006)}
-\end{figure}
-\pagebreak
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[scale=0.5]{depth5.pdf}\\
-    \includegraphics[scale=0.5]{depth6.pdf}\\
-    \includegraphics[scale=0.5]{depth7.pdf}\\
-\end{figure}
-\pagebreak
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[scale=0.5]{depth8.pdf}\\
-    \includegraphics[scale=0.5]{depth9.pdf}\\
-    \includegraphics[scale=0.5]{depth10.pdf}\\
-\end{figure}
-\pagebreak
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[scale=0.5]{depth11.pdf}\\
-    \includegraphics[scale=0.5]{depth12.pdf}\\
-    \includegraphics[scale=0.5]{depth13.pdf}\\
-\end{figure}
-\pagebreak
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[scale=0.5]{depth14.pdf}\\
-    \includegraphics[scale=0.5]{depth14.pdf}\\
-    \caption{Stress vs. Displacement and pie chart for energy partitioning. We use the area for calculation of radiated energies.}
+    \includegraphics[scale=0.7]{fig_noise_1.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 5.}
 \end{figure}
 \clearpage
 
-Next, we show the variation of the energies with depth. The Fig. 3 is plotted using the given values of input parameters $D_c$ and $M_0$. In Fig. 4, we reduce the $D_c$ in order to obtain positive values of radiated energies using the total potential energy. The radiated energy calculation from the area of the triangle does not change. Fig. 5 shows the energy partitioning for $M_w$ 7 earthquake.
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[scale=0.5]{energy_part_M5.pdf}\\
-    \caption{Energy partitioning for $M_w$ 5 earthquake with $D_c = 0.1$ m.}
-\end{figure}
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[scale=0.5]{energy_part_M5_2.pdf}\\
-    \caption{Energy partitioning for $M_w$ 5 earthquake with $D_c = 0.006$ m.}
-\end{figure}
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[scale=0.5]{energy_part_M7.pdf}\\
-    \caption{Energy partitioning for $M_w$ 7 earthquake with $D_c = 1$ m.}
-\end{figure}
-\clearpage
+\section*{Best fit curve using the Brune's Model}
+We use damped least squares to solve the nonlinear curve fitting, analogous to robustfit in Matlab. The best fit curve is shown in Fig. 3. The values of moment ratio and the corner frequencies are as follows (the superscript represents the noise level):
 
+\begin{align*}
+    &R^5 = 102.212 \\
+    &fc_1^5 = 20.156 Hz \\
+    &fc_2^5 = 47.474 Hz
+\end{align*}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_noise_2.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 5.}
+\end{figure}
+
+We get values of moment ratio and corner frequencies very close to the true values from inversion.
+
+\section*{Increasing the amplitude of white noise}
+We increase the peak noise amplitude and look at the inversion results. The results are shown in Fig. 4, 5, 6 and their values are shown below.
+\begin{align*}
+    &R^{10} = 104.444 \\
+    &fc_1^{10} = 20.354 Hz \\
+    &fc_2^{10} = 45.680 Hz
+\end{align*}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_noise_3.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 10.}
+\end{figure}
+\begin{align*}
+    &R^{20} = 110.330 \\
+    &fc_1^{20} = 19.381 Hz \\
+    &fc_2^{20} = 39.625 Hz
+\end{align*}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_noise_4.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 20.}
+\end{figure}
+\begin{align*}
+    &R^{50} = 125.009 \\
+    &fc_1^{50} = 20.418 Hz \\
+    &fc_2^{50} = 35.746 Hz
+\end{align*}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_noise_5.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 50.}
+\end{figure}
+
+We see that we get increasing errors with increasing peak noise amplitude level but it scales linearly with increasing noise. The values of $fc_2$ are less robust to inversion than the moment ratio and $fc_1$. There is significant deviation in all the three values at peak noise amplitude of $50$ and above. 
+
+\clearpage
+\section*{Synthetic spectral ratio with limited frequency}
+We cut the synthetic spectral ratio to a range of $3-35$ Hz and try the best fitting with peak noise levels of $5, 10, 20, 50$ and look at the inverted values below. The best fit curves are shown in Fig. 7, 8, 9, 10, and the values are listed in Table 1. We see that the moment ratio and the corner frequency $fc_1$ is better estimated than $fc_2$, because we have a limited frequency of data available.
+\begin{center}
+\begin{table}
+    \begin{tabular}{l c c c}
+        \toprule%
+        Peak Noise Level & Moment Ratio & $fc_1$ & $fc_2$ \\
+        \midrule
+        \multicolumn{4}{c}{Frequency Range $3-200$ Hz, Moment Ratio 100}\\
+        \midrule
+        0 & 100 & 20 & 50 \\
+        5 & 102.212 & 20.156 & 47.474 \\
+        10 & 104.444 & 20.354 & 45.680\\
+        20 & 110.330 & 19.381 & 39.625\\
+        50 & 125.009 & 20.418 & 35.746\\
+        \midrule
+        \multicolumn{4}{c}{Frequency Range $3-35$ Hz, Moment Ratio 100}\\
+        \midrule
+        5 & 102.522 & 20.094 & 47.713 \\
+        10 & 104.250 & 20.367 & 45.894\\
+        20 & 111.088 & 19.818 & 40.999\\
+        50 & 128.728 & 17.470 & 29.304\\
+        \midrule
+        \multicolumn{4}{c}{Frequency Range $3-35$ Hz, Moment Ratio 10}\\
+        \midrule
+        0 & 10 & 20 & 50 \\
+        5 & 12.439 & 21.442 & 40.894 \\
+        10 & 15.187 & 16.637 & 24.192\\
+        20 & 21.622 & 13.665 & 17.351\\
+        50 & 51.577 & 3.02 & 3.988\\
+        \bottomrule
+    \end{tabular}
+    \caption{Inverted values for all the cases}
+\end{table}
+\end{center}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_freq_noise_1.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 5.}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_freq_noise_2.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 10.}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_freq_noise_3.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 20.}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_freq_noise_4.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 50.}
+\end{figure}
+
+In the next part, we change the moment ratio to 10 and see the response to increasing noise on the moment ratio and corner frequency inversion. Since the moment ratio is low, we see that any inversion with peak noise greater than 10 gives totally unreliable inversion results even for the corner frequencies (Fig, 11, 12, 13, 14). The inversions give the peak noise level as the output rather than the moment ratio of synthetic data.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_mom_noise_1.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 5.}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_mom_noise_2.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 10.}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_mom_noise_3.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 20.}
+\end{figure}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{fig_mom_noise_4.pdf}
+    \caption{Synthetic spectral ratio with noise peak amplitude of 50.}
+\end{figure}
 \end{document}
