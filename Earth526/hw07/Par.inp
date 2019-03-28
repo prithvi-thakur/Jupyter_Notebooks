@@ -1,0 +1,53 @@
+#----- General parameters ----------------
+&GENERAL iexec=1, ngll=5, fmax=1d0 , ndof=2 ,
+  title = 'Real Case Test of Pulse Slab', verbose='1011' , ItInfo = 400 /
+
+#----- Build the mesh ---------------------------
+# with fault layer for Kelvin-Voigt material
+&MESH_DEF  method = 'CARTESIAN' /
+&MESH_CART  xlim=0d0,40d0, zlim=0d0,26d0, nelem=800,520 / #h=0.05
+&MESH_CART_DOMAIN tag=1, ex=1,800, ez=11,520 /
+&MESH_CART_DOMAIN tag=2, ex=1,800, ez=2,10 /
+&MESH_CART_DOMAIN tag=3, ex=1,800, ez=1,1 /
+
+#---- Material parameters --------------
+
+# HOST ROCK
+&MATERIAL tag = 1, kind='ELAST' /
+&MAT_ELASTIC rho=1d0, cp=1.7320508d0, cs=1d0 /
+
+# DAMAGED ROCK#1
+&MATERIAL tag = 2, kind='ELAST' /
+&MAT_ELASTIC rho=1d0, cp=0.8660254d0, cs=0.5d0 /
+
+# FAULT PLANE#2
+&MATERIAL tag = 3, kind='ELAST','KV' /
+&MAT_ELASTIC rho=1d0, cp=0.8660254d0, cs=0.5d0 /
+&MAT_KV eta=0.1d0 /
+
+#----- Boundary conditions ---------------------
+
+&BC_DEF  tag = 1, kind = 'DYNFLT' /
+&BC_DYNFLT friction='SWF', Szz=-2d0, SxzH='PWCONR' /
+&DIST_PWCONR num=2 /
+1.4d0
+1.2001d0 0.2625d0
+&BC_DYNFLT_SWF Dc=1d0, MuS=0.6d0, MuD=0.1d0, healing=F /
+#&BC_DYNFLT_TWF MuS=0.6d0, MuD=0.1d0, Mu0=0.25d0, X=0d0, Z=0d0, V=0.25d0, L=1d0, T=25d0 /
+
+&BC_DEF  tag = 2 , kind = 'ABSORB' /
+
+&BC_DEF  tag = 3 , kind = 'ABSORB' /
+
+&BC_DEF  tag = 4 , kind = 'DIRNEU' /
+&BC_DIRNEU h='N', v='D' /
+
+#---- Time scheme settings ----------------------
+&TIME  TotalTime=10d0, courant = 0.5d0, kind='leapfrog' / # T=160
+
+#----- Receivers ---------------------------------
+
+
+#--------- Snapshot output settings ----------------------
+&SNAP_DEF it1=1000,itd=1000, fields ='dc', components='xz', ps=F /
+#&SNAP_PS vectors =F, interpol = F, DisplayPts=6, ScaleField=2d0   /
