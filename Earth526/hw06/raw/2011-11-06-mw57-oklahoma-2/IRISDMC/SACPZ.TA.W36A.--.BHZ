@@ -1,0 +1,40 @@
+* **********************************
+* NETWORK   (KNETWK): TA
+* STATION    (KSTNM): W36A
+* LOCATION   (KHOLE):   
+* CHANNEL   (KCMPNM): BHZ
+* CREATED           : 2019-03-20T15:11:44
+* START             : 2011-09-09T16:00:00
+* END               : 2012-02-01T15:40:00
+* DESCRIPTION       : Wetumka, OK, USA
+* LATITUDE          : 35.139300
+* LONGITUDE         : -96.226400
+* ELEVATION         : 251.0
+* DEPTH             : 0.0
+* DIP               : 0.0
+* AZIMUTH           : 0.0
+* SAMPLE RATE       : 40.0
+* INPUT UNIT        : M
+* OUTPUT UNIT       : COUNTS
+* INSTTYPE          : Streckeisen STS-2.5/Quanterra 330 Linear Phase Com
+* INSTGAIN          : 1.498020e+03 (M/S)
+* COMMENT           : 101027 0100000A287A1DFA
+* SENSITIVITY       : 6.283160e+08 (M/S)
+* A0                : 3.604750e+10
+* **********************************
+ZEROS	4
+	+0.000000e+00	+0.000000e+00	
+	+0.000000e+00	+0.000000e+00	
+	+0.000000e+00	+0.000000e+00	
+	-9.425000e+00	+0.000000e+00	
+POLES	7
+	-3.700000e-02	+3.700000e-02	
+	-3.700000e-02	-3.700000e-02	
+	-9.739000e+00	+0.000000e+00	
+	-2.199000e+02	+1.382000e+02	
+	-2.199000e+02	-1.382000e+02	
+	-2.199000e+02	+6.849000e+02	
+	-2.199000e+02	-6.849000e+02	
+CONSTANT	2.264922e+19
+
+

@@ -1,0 +1,50 @@
+ 4633  ls 
+ 4634  cd ..
+ 4635  ls 
+ 4636  ls -lat *  | head
+ 4637  cd sac
+ 4638  ls 
+ 4639  cd bin
+ 4640  ls
+ 4641  pwd
+ 4642  vim ~/.zshrc
+ 4643  source ~/.zshrc
+ 4644  sac
+ 4645  source sacinit.sh
+ 4646  sac
+ 4647  vim ~/.zshrc
+ 4648  vim sacinit.sh
+ 4649  sh sacinit.
+ 4650  sh sacinit.sh
+ 4651  vim sacinit.sh
+ 4652  source ~/.zshrc
+ 4653  sac
+ 4654  courses
+ 4655  cd coursework/Earth526/hw06/src
+ 4656  ls
+ 4657* source ~/.zshrc
+ 4658* ls
+ 4659  sac
+ 4660* ipython
+ 4661  ls 
+ 4662  ls *E.sac | wc -l 
+ 4663  saclst kztime f *,sac
+ 4664  saclst kztime f *.sac
+ 4665  ls 
+ 4666  ls *E.sac | sed 's/HE/H?/g' 
+ 4667  ls *E.sac | sed 's/HE/H?/g' | awk '{print "r "$1"\nqdp off\nppk m on bell off\nwh\n"} END{print "q"}' 
+ 4668  ls *E.sac | sed 's/HE/H?/g' | awk '{print "r "$1"\nqdp off\nppk m on bell off\nwh\n"} END{print "q"}' | sac
+ 4669  ls 
+ 4670  saclst t0 f *sac
+ 4671  sac
+ 4672  ls 
+ 4673  saclst t0 f *.sac 
+ 4674  saclst t0 f *.sac | awk '{if($2>0) print}' 
+ 4675  saclst t0 f *.sac | awk '{if($2>0) print}' | awk '{printf "cut %f %f\nr %s\nw append .cut\n",$2-0.5,$2+7.5,$1} END{print "q"}' 
+ 4676  saclst t0 f *.sac | awk '{if($2>0) print}' | awk '{printf "cut %f %f\nr %s\nw append .cut\n",$2-0.5,$2+7.5,$1} END{print "q"}' | sac
+ 4677  ls 
+ 4678  sac
+ 4679  ls 
+ 4680  history 
+ 4681  ls 
+ 4682  vi readme
