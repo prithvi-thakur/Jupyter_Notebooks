@@ -4,3 +4,6 @@
 .synctex.gz
 .fdb_latexmk
 .aux
+*.dat
+*sem2d*
+*.hdr

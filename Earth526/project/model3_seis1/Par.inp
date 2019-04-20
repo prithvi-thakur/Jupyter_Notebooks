@@ -1,0 +1,43 @@
+# Velocity weakening rupture pulse like in Ampuero and Ben-Zion (2008)
+# OG 
+#----- Some general parameters ----------------
+&GENERAL iexec=1, ngll=6, fmax=3.d0 , ndof=2 ,
+  title = 'Velocity weakening fault', verbose='1101' , ItInfo = 100/
+
+#----- Build the mesh ---------------------------
+&MESH_DEF  method = 'CARTESIAN'/
+
+&MESH_CART xlim=0d3,25d3, zlim=0d3,25d3, nelem=200,200, fztag=2/
+
+#---- Material parameters --------------
+&MATERIAL tag=1, kind='ELAST' /
+&MATERIAL tag=2, kind='ELAST','KV' /
+&MAT_ELASTIC rho=2.738254013691604d3, cp=4.894948787270404d3, cs=2.8261d3 /
+&MAT_KV eta=0.2d0 /
+
+#----- Boundary conditions ---------------------
+
+&BC_DEF  tag = 1, kind = 'DYNFLT' /
+&BC_DYNFLT Tn=-130d6,TtH='PWCONR', friction='SWF' /
+&DIST_PWCONR num=2/ # Initial shear stress
+     2.5d3
+91.001d6 82.81d6
+&BC_DYNFLT_SWF kind=1, DcH='LINEAR', MuS=0.7d0, MuD=0.6d0 /
+&DIST_LINEAR file='dc_model2.txt', n=100, dim=1, length=0 /
+
+&BC_DEF  tag = 2 , kind = 'ABSORB' /
+&BC_DEF  tag = 3 , kind = 'ABSORB' /
+
+&BC_DEF  tag = 4 , kind = 'DIRNEU' /
+&BC_DIRNEU h='N', v='D' /
+
+#---- Time scheme settings ----------------------
+&TIME  TotalTime=14d0, courant = 0.55d0, kind='leapfrog' /
+
+#----- Receivers ---------------------------------
+&REC_LINE file='seismometer_loc_config1.txt', AtNode=T, isamp=20, field='V' / 
+
+#--------- Plots settings ----------------------
+&SNAP_DEF itd=500, fields ='V',bin=T,ps=F /
+&SNAP_PS  vectors =T, mesh=T, color=T, symbols=T, interpol = F /
+#, DisplayPts=6, ScaleField=2d0   /

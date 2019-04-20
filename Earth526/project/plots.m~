@@ -1,0 +1,18 @@
+% Matlab tools for plot visualization
+addpath ./POST
+addpath ./test2/
+
+% and add a nice colormap 
+%batlow=load('~/ScientificColourMaps5/batlow/batlow.mat');
+
+% read data
+data = sem2d_read_seis('./test2');
+
+% create the time-series
+time = (1:data.nt)*data.dt;
+
+figure();
+plot(time, data.ux(2,:), label, 'ux');
+plot(time, data.uz(2,:), label, 'uz');
+xlim([0,3])
+figure(gc

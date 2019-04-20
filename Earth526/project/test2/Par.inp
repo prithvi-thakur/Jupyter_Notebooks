@@ -1,0 +1,65 @@
+# Velocity weakening rupture pulse like in Ampuero and Ben-Zion (2008)
+# OG 
+#----- Some general parameters ----------------
+&GENERAL iexec=1, ngll=6, fmax=3.d0 , ndof=2 ,
+  title = 'Velocity weakening fault', verbose='1101' , ItInfo = 100/
+
+#----- Build the mesh ---------------------------
+&MESH_DEF  method = 'CARTESIAN'/
+
+&MESH_CART xlim=0d3,0.3d3, zlim=0d3,0.15d3, nelem=100,50, fztag=2/
+
+#---- Material parameters --------------
+&MATERIAL tag=1, kind='ELAST' /
+&MATERIAL tag=2, kind='ELAST','KV' /
+&MAT_ELASTIC rho=2.738254013691604d3, cp=4.894948787270404d3, cs=2.8261d3 /
+&MAT_KV eta=0.2d0 /
+
+#----- Boundary conditions ---------------------
+
+&BC_DEF  tag = 1, kind = 'DYNFLT' /
+&BC_DYNFLT Tn=-130d6,TtH='PWCONR', friction='SWF' /
+&DIST_PWCONR num=2/ # Initial shear stress
+     7.5d0
+91.001d6 82.81d6
+&BC_DYNFLT_SWF kind=1, DcH='LINEAR', MuS=0.7d0, MuD=0.6d0 /
+&DIST_LINEAR n=2, dim=1 /
+0.00d0 0.41d0
+15.79d0 0.41d0
+31.58d0 0.41d0
+47.37d0 0.39d0
+63.16d0 0.39d0
+78.95d0 0.41d0
+94.74d0 0.41d0
+110.53d0 0.41d0
+126.32d0 0.39d0
+142.11d0 0.39d0
+157.89d0 0.41d0
+173.68d0 0.41d0
+189.47d0 0.39d0
+205.26d0 0.39d0
+221.05d0 0.39d0
+236.84d0 0.41d0
+252.63d0 0.41d0
+268.42d0 0.39d0
+284.21d0 0.39d0
+300.00d0 0.41d0
+
+&BC_DEF  tag = 2 , kind = 'ABSORB' /
+&BC_DEF  tag = 3 , kind = 'ABSORB' /
+
+&BC_DEF  tag = 4 , kind = 'DIRNEU' /
+&BC_DIRNEU h='N', v='D' /
+
+#---- Time scheme settings ----------------------
+&TIME  TotalTime=5d0, courant = 0.55d0, kind='leapfrog' /
+#&TIME  TotalTime=0.025d0, courant = 0.55d0, kind='leapfrog' /
+#&TIME  TotalTime=0.0125d0, courant = 0.55d0, kind='leapfrog' /
+
+#----- Receivers ---------------------------------
+&REC_LINE file='seismometer_loc_config2.txt', AtNode=T, isamp=20, field='V' / 
+
+#--------- Plots settings ----------------------
+&SNAP_DEF itd=1000, fields ='V',bin=T,ps=F /
+&SNAP_PS  vectors =T, mesh=T, color=T, symbols=T, interpol = F /
+#, DisplayPts=6, ScaleField=2d0   /
